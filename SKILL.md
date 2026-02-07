@@ -41,6 +41,11 @@ API reference:
 
 ## Tooling options
 
+This skill supports **both** approaches; you can decide later per deployment.
+
+- Set `VAPI_MODE=api` to prefer REST (default)
+- Set `VAPI_MODE=cli` to prefer the Vapi CLI (interactive)
+
 ### Option A — REST via helper script (works everywhere)
 
 This repo includes a tiny Node helper:
@@ -67,6 +72,8 @@ VAPI_API_KEY=... node skills/vapi/bin/vapi-api.mjs calls:create \
 ```
 
 ### Option B — Vapi CLI (good for interactive ops)
+
+If `VAPI_MODE=cli`, prefer using the CLI for management tasks and fall back to REST if the CLI isn’t installed.
 
 Docs:
 - https://docs.vapi.ai/cli
