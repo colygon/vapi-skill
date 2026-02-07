@@ -8,8 +8,9 @@ This folder is an OpenClaw skill scaffold for integrating with **Vapi (vapi.ai)*
 ## Next steps
 
 1. Provide `VAPI_API_KEY` to your OpenClaw/Gateway environment.
-2. Create an event in `public.events` for your city slug(s), then submit items.
-3. Use the helper to list/create assistants.
+   - For local dev: copy `.env.example` → `.env` and set `VAPI_API_KEY`.
+   - `.env` is gitignored.
+2. Use the helper to list/create assistants.
 
 ## References
 
