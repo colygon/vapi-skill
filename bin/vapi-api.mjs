@@ -121,16 +121,42 @@ const cmd = args._[0];
       return;
     }
 
+    case "phoneNumbers:list": {
+      const data = await req("/phone-number");
+      print(data);
+      return;
+    }
+
     case "calls:create": {
       const assistantId = args.assistantId;
       const to = args.to;
-      const from = args.from;
-      if (!assistantId || !to || !from) {
+      const customerId = args.customerId;
+
+      const phoneNumberId = args.phoneNumberId;
+
+      if (!assistantId) {
+        throw new Error("Usage: calls:create --assistantId <id> ...");
+      }
+
+      if (!phoneNumberId) {
         throw new Error(
-          "Usage: calls:create --assistantId <id> --to <E.164> --from <E.164> (see swagger for other fields)",
+          "calls:create requires --phoneNumberId <id> (run: phoneNumbers:list)",
         );
       }
-      const body = { assistantId, to, from };
+
+      if (!to && !customerId) {
+        throw new Error(
+          "calls:create requires either --to <E.164> (transient customer) or --customerId <id>",
+        );
+      }
+
+      const body = {
+        assistantId,
+        phoneNumberId,
+        ...(customerId ? { customerId } : {}),
+        ...(to ? { customer: { number: to } } : {}),
+      };
+
       const data = await req("/call", { method: "POST", body });
       print(data);
       return;
@@ -146,7 +172,9 @@ const cmd = args._[0];
           "  assistants:create --name ... [--modelProvider ... --model ... --voiceProvider ... --voiceId ...]",
           "  calls:list",
           "  calls:get --id ...",
-          "  calls:create --assistantId ... --to ... --from ...",
+          "  phoneNumbers:list",
+          "  calls:create --assistantId ... --phoneNumberId ... --to <E.164>",
+          "    (or: --customerId <id>)",
         ].join("\n"),
       );
       process.exit(1);
